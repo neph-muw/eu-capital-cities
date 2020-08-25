@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7978D7BE24EFF65F0097CC30 /* CityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978D7BD24EFF65F0097CC30 /* CityTableViewCell.swift */; };
+		7978D7C124EFF6C90097CC30 /* EuCity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978D7C024EFF6C90097CC30 /* EuCity.swift */; };
+		7978D7C424EFF91B0097CC30 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978D7C324EFF91B0097CC30 /* NetworkManager.swift */; };
+		7978D7C624F14EC70097CC30 /* String+Emoji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978D7C524F14EC70097CC30 /* String+Emoji.swift */; };
+		7978D7C824F254320097CC30 /* FavouriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978D7C724F254320097CC30 /* FavouriteButton.swift */; };
+		7978D7CA24F511F40097CC30 /* CityCellConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978D7C924F511F40097CC30 /* CityCellConfiguration.swift */; };
+		7978D7CC24F55B500097CC30 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978D7CB24F55B500097CC30 /* LoadingView.swift */; };
 		798DBD0024ECF38800661EFE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798DBCFF24ECF38800661EFE /* AppDelegate.swift */; };
 		798DBD0224ECF38800661EFE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798DBD0124ECF38800661EFE /* SceneDelegate.swift */; };
 		798DBD0424ECF38800661EFE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798DBD0324ECF38800661EFE /* ViewController.swift */; };
@@ -36,6 +43,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7978D7BD24EFF65F0097CC30 /* CityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityTableViewCell.swift; sourceTree = "<group>"; };
+		7978D7C024EFF6C90097CC30 /* EuCity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EuCity.swift; sourceTree = "<group>"; };
+		7978D7C324EFF91B0097CC30 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		7978D7C524F14EC70097CC30 /* String+Emoji.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Emoji.swift"; sourceTree = "<group>"; };
+		7978D7C724F254320097CC30 /* FavouriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteButton.swift; sourceTree = "<group>"; };
+		7978D7C924F511F40097CC30 /* CityCellConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityCellConfiguration.swift; sourceTree = "<group>"; };
+		7978D7CB24F55B500097CC30 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		798DBCFC24ECF38800661EFE /* eu-capital-cities.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "eu-capital-cities.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		798DBCFF24ECF38800661EFE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		798DBD0124ECF38800661EFE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -78,6 +92,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7978D7BC24EFF6220097CC30 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7978D7C924F511F40097CC30 /* CityCellConfiguration.swift */,
+				7978D7BD24EFF65F0097CC30 /* CityTableViewCell.swift */,
+				7978D7C724F254320097CC30 /* FavouriteButton.swift */,
+				7978D7CB24F55B500097CC30 /* LoadingView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7978D7BF24EFF6970097CC30 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7978D7C024EFF6C90097CC30 /* EuCity.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		7978D7C224EFF7F20097CC30 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				7978D7C324EFF91B0097CC30 /* NetworkManager.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		798DBCF324ECF38800661EFE = {
 			isa = PBXGroup;
 			children = (
@@ -104,6 +145,10 @@
 				798DBCFF24ECF38800661EFE /* AppDelegate.swift */,
 				798DBD0124ECF38800661EFE /* SceneDelegate.swift */,
 				798DBD0324ECF38800661EFE /* ViewController.swift */,
+				7978D7C524F14EC70097CC30 /* String+Emoji.swift */,
+				7978D7C224EFF7F20097CC30 /* Network */,
+				7978D7BF24EFF6970097CC30 /* Model */,
+				7978D7BC24EFF6220097CC30 /* Views */,
 				798DBD0524ECF38800661EFE /* Main.storyboard */,
 				798DBD0B24ECF38900661EFE /* Assets.xcassets */,
 				798DBD0D24ECF38900661EFE /* LaunchScreen.storyboard */,
@@ -263,7 +308,14 @@
 			files = (
 				798DBD0424ECF38800661EFE /* ViewController.swift in Sources */,
 				798DBD0A24ECF38800661EFE /* eu_capital_cities.xcdatamodeld in Sources */,
+				7978D7BE24EFF65F0097CC30 /* CityTableViewCell.swift in Sources */,
+				7978D7CC24F55B500097CC30 /* LoadingView.swift in Sources */,
+				7978D7C824F254320097CC30 /* FavouriteButton.swift in Sources */,
+				7978D7C624F14EC70097CC30 /* String+Emoji.swift in Sources */,
+				7978D7CA24F511F40097CC30 /* CityCellConfiguration.swift in Sources */,
+				7978D7C424EFF91B0097CC30 /* NetworkManager.swift in Sources */,
 				798DBD0024ECF38800661EFE /* AppDelegate.swift in Sources */,
+				7978D7C124EFF6C90097CC30 /* EuCity.swift in Sources */,
 				798DBD0224ECF38800661EFE /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -443,7 +495,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 745Z448K3R;
 				INFOPLIST_FILE = "eu-capital-cities/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -463,7 +515,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 745Z448K3R;
 				INFOPLIST_FILE = "eu-capital-cities/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
