@@ -14,6 +14,8 @@
 		7978D7C824F254320097CC30 /* FavouriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978D7C724F254320097CC30 /* FavouriteButton.swift */; };
 		7978D7CA24F511F40097CC30 /* CityCellConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978D7C924F511F40097CC30 /* CityCellConfiguration.swift */; };
 		7978D7CC24F55B500097CC30 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978D7CB24F55B500097CC30 /* LoadingView.swift */; };
+		7978D7CE24F796A20097CC30 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978D7CD24F796A20097CC30 /* DetailsViewController.swift */; };
+		7978D7D024F7BBE80097CC30 /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978D7CF24F7BBE80097CC30 /* LocationViewController.swift */; };
 		798DBD0024ECF38800661EFE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798DBCFF24ECF38800661EFE /* AppDelegate.swift */; };
 		798DBD0224ECF38800661EFE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798DBD0124ECF38800661EFE /* SceneDelegate.swift */; };
 		798DBD0424ECF38800661EFE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798DBD0324ECF38800661EFE /* ViewController.swift */; };
@@ -50,6 +52,8 @@
 		7978D7C724F254320097CC30 /* FavouriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteButton.swift; sourceTree = "<group>"; };
 		7978D7C924F511F40097CC30 /* CityCellConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityCellConfiguration.swift; sourceTree = "<group>"; };
 		7978D7CB24F55B500097CC30 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		7978D7CD24F796A20097CC30 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
+		7978D7CF24F7BBE80097CC30 /* LocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
 		798DBCFC24ECF38800661EFE /* eu-capital-cities.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "eu-capital-cities.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		798DBCFF24ECF38800661EFE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		798DBD0124ECF38800661EFE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -145,6 +149,8 @@
 				798DBCFF24ECF38800661EFE /* AppDelegate.swift */,
 				798DBD0124ECF38800661EFE /* SceneDelegate.swift */,
 				798DBD0324ECF38800661EFE /* ViewController.swift */,
+				7978D7CD24F796A20097CC30 /* DetailsViewController.swift */,
+				7978D7CF24F7BBE80097CC30 /* LocationViewController.swift */,
 				7978D7C524F14EC70097CC30 /* String+Emoji.swift */,
 				7978D7C224EFF7F20097CC30 /* Network */,
 				7978D7BF24EFF6970097CC30 /* Model */,
@@ -313,10 +319,12 @@
 				7978D7C824F254320097CC30 /* FavouriteButton.swift in Sources */,
 				7978D7C624F14EC70097CC30 /* String+Emoji.swift in Sources */,
 				7978D7CA24F511F40097CC30 /* CityCellConfiguration.swift in Sources */,
+				7978D7D024F7BBE80097CC30 /* LocationViewController.swift in Sources */,
 				7978D7C424EFF91B0097CC30 /* NetworkManager.swift in Sources */,
 				798DBD0024ECF38800661EFE /* AppDelegate.swift in Sources */,
 				7978D7C124EFF6C90097CC30 /* EuCity.swift in Sources */,
 				798DBD0224ECF38800661EFE /* SceneDelegate.swift in Sources */,
+				7978D7CE24F796A20097CC30 /* DetailsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -21,6 +21,7 @@ private extension UICellConfigurationState {
 class CityTableViewCell: UITableViewCell {
     
     private var item: EuCity? = nil
+    var cityCellDelegate: CityTableViewCellDelegate?
     
     func updateWithItem(_ newItem: EuCity) {
         guard item != newItem else { return }
@@ -68,9 +69,21 @@ class CityTableViewCell: UITableViewCell {
             if let data = item.imageData {
                 content.image = UIImage(data: data)
             }
+            content.favourited = item.favourited
         }
+        content.cell = self
         contentConfiguration = content
     }
+}
 
-    
+extension CityTableViewCell {
+    func wasFavourited(favourited: Bool) {
+        debugPrint("TMPLOG favourited \(favourited)")
+        guard let city = item else { return }
+        cityCellDelegate?.wasFavourited(favourited: favourited, forCell: self, withItem: city)
+    }
+}
+
+protocol CityTableViewCellDelegate {
+    func wasFavourited(favourited: Bool, forCell: CityTableViewCell, withItem: EuCity)
 }

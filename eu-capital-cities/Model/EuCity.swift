@@ -8,6 +8,9 @@
 import Foundation
 
 class EuCity: Codable, Hashable {
+    
+    // MARK: Variables
+    
     let id: String?
     let name: String?
     let description: String?
@@ -15,7 +18,10 @@ class EuCity: Codable, Hashable {
     let latitude: String?
     let longitude: String?
     
+    // MARK: Computed varialbes
+    
     var imageData: Data?
+    var favourited: Bool? = false
     
     static func == (lhs: EuCity, rhs: EuCity) -> Bool {
         guard lhs.id == rhs.id,

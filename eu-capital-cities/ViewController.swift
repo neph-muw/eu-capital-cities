@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class ViewController: UIViewController {
     
@@ -20,13 +21,9 @@ class ViewController: UIViewController {
     let network = NetworkManager()
     let tableView = UITableView(frame: .zero, style: .plain)
     let loadingView = LoadingView(frame: .zero)
-    private(set) var cities: [EuCity] = [] {
-        didSet {
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
-    }
+    private(set) var cities: [EuCity] = []
+    var isFilterEnabled: Bool = false
+    var coreDataCities: [NSManagedObject] = []
 
     // MARK: Life cycle
     
@@ -38,6 +35,9 @@ class ViewController: UIViewController {
     }
     
     private func configureViews() {
+        let filter = UIBarButtonItem(title: "Filter", style: .plain, target: self, action: #selector(onFilter))
+        navigationItem.rightBarButtonItems = [filter]
+        
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -46,9 +46,8 @@ class ViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             ])
-        tableView.allowsSelection = false
         tableView.register(CityTableViewCell.self, forCellReuseIdentifier: Configuration.cellReuseIdentifier)
-//        tableView.delegate = self
+        tableView.delegate = self
         tableView.dataSource = self
         
         view.addSubview(loadingView)
@@ -61,7 +60,6 @@ class ViewController: UIViewController {
             loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             ])
         loadingView.startLoading()
-        
     }
     
     private func loadCities() {
@@ -74,7 +72,9 @@ class ViewController: UIViewController {
                 guard let output = output else { return }
                 let jsonOutput = try JSONDecoder().decode([EuCity].self, from: output)
                 self.cities = jsonOutput
-                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
                 self.downloadImages()
             } catch let error {
                 debugPrint(error)
@@ -109,19 +109,124 @@ class ViewController: UIViewController {
         
         group.notify(queue: DispatchQueue.main) {
             debugPrint("TMPLOG loading images done")
+            
+            self.coreDataFetch()
+            self.mapFavourites()
+            
             self.loadingView.stopLoading()
             self.tableView.reloadData()
         }
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+    }
+    
+    // MARK: Actions
+    
+    @objc func onFilter() {
+        debugPrint("TMPLOG onFilter")
+        isFilterEnabled = !isFilterEnabled
+        tableView.reloadData()
+    }
+    
+    func filteredCities() -> [EuCity] {
+        return cities.filter { $0.favourited == true }
+    }
+    
+    // MARK: Core Data
+    
+    func mapFavourites() {
+         cities.forEach { city in
+            guard let cityId = city.id, let coreDataCity = coreDataCity(whereId: cityId) else { return }
+            
+            city.favourited = coreDataCity.value(forKeyPath: "favourited") as? Bool
+        }
+    }
+    
+    func coreDataCity(whereId: String) -> NSManagedObject? {
+        coreDataCities.filter { city in
+            city.value(forKeyPath: "id") as? String == whereId
+        }.first
+    }
+    
+    func coreDataSave(city: EuCity) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return}
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        guard let cityId = city.id else { return }
+        
+        guard city.favourited == true else {
+            // delete if unfauvorited and found in core data
+            guard let cityToBeDeleted: NSManagedObject = coreDataCity(whereId: cityId) else { return }
+            
+            managedContext.delete(cityToBeDeleted)
+            coreDataCities.removeAll { $0 == cityToBeDeleted }
+            
+            do {
+                try managedContext.save()
+            } catch let error as NSError {
+                debugPrint("TMPLOG Could not delete. \(error), \(error.userInfo)")
+            }
+            return
+        }
+        
+        // do not add extra favourited values if exists
+        if coreDataCity(whereId: cityId) != nil { return }
+        
+        let entity = NSEntityDescription.entity(forEntityName: "CoreDataEuCity", in: managedContext)!
+        let coreDataCity = NSManagedObject(entity: entity, insertInto: managedContext)
+        
+        coreDataCity.setValue(city.id, forKeyPath: "id")
+        coreDataCity.setValue(city.favourited, forKeyPath: "favourited")
+        
+        
+        do {
+            try managedContext.save()
+            coreDataCities.append(coreDataCity)
+        } catch let error as NSError {
+            debugPrint("TMPLOG Could not save. \(error), \(error.userInfo)")
+        }
+    }
+        
+    func coreDataFetch() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return}
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "CoreDataEuCity")
+        do {
+            coreDataCities = try managedContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            debugPrint("TMPLOG Could not fetch. \(error), \(error.userInfo)")
+        }
+    }
 }
 
-//extension ViewController: UITableViewDelegate {
-//
-//}
-//
+extension ViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var calculatedCities: [EuCity] {
+            if isFilterEnabled {
+                return filteredCities()
+            } else {
+                return cities
+            }
+        }
+        
+        let city = calculatedCities[indexPath.row]
+        
+        let vc = DetailsViewController()
+        vc.city = city
+        navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cities.count
+        if isFilterEnabled {
+            return filteredCities().count
+        } else {
+            return cities.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -129,9 +234,31 @@ extension ViewController: UITableViewDataSource {
             return UITableViewCell(style: .value1, reuseIdentifier: Configuration.cellReuseIdentifier)
         }
         
-        let city = cities[indexPath.row]
+        cell.cityCellDelegate = self
+        
+        var calculatedCities: [EuCity] {
+            if isFilterEnabled {
+                return filteredCities()
+            } else {
+                return cities
+            }
+        }
+        
+        let city = calculatedCities[indexPath.row]
         cell.updateWithItem(city)
 
         return cell
+    }
+}
+
+extension ViewController: CityTableViewCellDelegate {
+    func wasFavourited(favourited: Bool, forCell: CityTableViewCell, withItem: EuCity) {
+        let changedCity = cities.filter { city in
+            return city.id == withItem.id
+        }.first
+        guard let city = changedCity else { return }
+        city.favourited = favourited
+        debugPrint("TMPLOG cities favourited = \(cities)")
+        coreDataSave(city: city)
     }
 }

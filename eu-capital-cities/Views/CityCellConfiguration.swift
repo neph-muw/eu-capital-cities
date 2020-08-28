@@ -11,7 +11,9 @@ import UIKit
 struct CityCellConfiguration: UIContentConfiguration, Hashable {
     var image: UIImage? = nil
     var cityName: String? = nil
-    var fafourited: Bool? = false
+    var favourited: Bool? = false
+    
+    weak var cell: CityTableViewCell? = nil
     
     func makeContentView() -> UIView & UIContentView {
         return CustomContentView(configuration: self)
@@ -20,6 +22,7 @@ struct CityCellConfiguration: UIContentConfiguration, Hashable {
     func updated(for state: UIConfigurationState) -> Self {
         guard let state = state as? UICellConfigurationState else { return self }
         let updatedConfig = self
+//        if state.
 //        if state.isSelected || state.isHighlighted {
 //
 //        }
@@ -58,6 +61,8 @@ class CustomContentView: UIView, UIContentView {
     private var favouriteButton: FavouriteButton!
     private let textLabel = UILabel()
     
+    private weak var cell: CityTableViewCell? = nil
+    
     private func setupInternalViews() {
         addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -93,10 +98,13 @@ class CustomContentView: UIView, UIContentView {
     }
     
     @objc func onFauvorite() {
-//        sender.isSelected = !sender.isSelected
-//        guard let configuration = self.configuration as? CityCellConfiguration else { return }
-//        configuration.fafourited = !configuration.fafourited
-        favouriteButton.isFavourited = !favouriteButton.isFavourited
+//        favouriteButton.isFavourited = !favouriteButton.isFavourited
+        guard var configuration = self.configuration as? CityCellConfiguration else { return }
+        configuration.favourited = !(configuration.favourited ?? false)
+        apply(configuration: configuration)
+//        configuration.
+//        setNeedsUpdateConfiguration()
+//
     }
     
     private var appliedConfiguration: CityCellConfiguration!
@@ -109,6 +117,8 @@ class CustomContentView: UIView, UIContentView {
         imageView.image = configuration.image
         textLabel.isHidden = configuration.cityName == nil
         textLabel.text = configuration.cityName
-        favouriteButton.isFavourited = configuration.fafourited ?? false
+        favouriteButton.isFavourited = configuration.favourited ?? false
+        cell = configuration.cell
+        cell?.wasFavourited(favourited: configuration.favourited ?? false)
     }
 }
