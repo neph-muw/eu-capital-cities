@@ -78,7 +78,6 @@ class CityTableViewCell: UITableViewCell {
 
 extension CityTableViewCell {
     func wasFavourited(favourited: Bool) {
-        debugPrint("TMPLOG favourited \(favourited)")
         guard let city = item else { return }
         cityCellDelegate?.wasFavourited(favourited: favourited, forCell: self, withItem: city)
     }

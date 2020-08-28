@@ -108,7 +108,6 @@ class ViewController: UIViewController {
         }
         
         group.notify(queue: DispatchQueue.main) {
-            debugPrint("TMPLOG loading images done")
             
             self.coreDataFetch()
             self.mapFavourites()
@@ -125,7 +124,6 @@ class ViewController: UIViewController {
     // MARK: Actions
     
     @objc func onFilter() {
-        debugPrint("TMPLOG onFilter")
         isFilterEnabled = !isFilterEnabled
         tableView.reloadData()
     }
@@ -166,7 +164,7 @@ class ViewController: UIViewController {
             do {
                 try managedContext.save()
             } catch let error as NSError {
-                debugPrint("TMPLOG Could not delete. \(error), \(error.userInfo)")
+                showError(from: self, with: "CoreData: Could not delete. \(error), \(error.userInfo)")
             }
             return
         }
@@ -185,7 +183,7 @@ class ViewController: UIViewController {
             try managedContext.save()
             coreDataCities.append(coreDataCity)
         } catch let error as NSError {
-            debugPrint("TMPLOG Could not save. \(error), \(error.userInfo)")
+            showError(from: self, with: "CoreData: Could not save. \(error), \(error.userInfo)")
         }
     }
         
@@ -197,7 +195,7 @@ class ViewController: UIViewController {
         do {
             coreDataCities = try managedContext.fetch(fetchRequest)
         } catch let error as NSError {
-            debugPrint("TMPLOG Could not fetch. \(error), \(error.userInfo)")
+            showError(from: self, with: "CoreData: Could not fetch. \(error), \(error.userInfo)")
         }
     }
 }
@@ -258,7 +256,18 @@ extension ViewController: CityTableViewCellDelegate {
         }.first
         guard let city = changedCity else { return }
         city.favourited = favourited
-        debugPrint("TMPLOG cities favourited = \(cities)")
         coreDataSave(city: city)
     }
+}
+
+// MARK: Handling errors
+
+func showError(from presenter: UIViewController, with message:String?) {
+    let alert = UIAlertController(title: "Error",
+                                  message: message,
+                                  preferredStyle: .alert)
+    let cancelAction = UIAlertAction(title: "Cancel",
+                                     style: .cancel)
+    alert.addAction(cancelAction)
+    presenter.present(alert, animated: true)
 }

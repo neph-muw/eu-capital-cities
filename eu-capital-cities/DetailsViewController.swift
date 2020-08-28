@@ -97,7 +97,6 @@ class DetailsViewController: UIViewController {
     // MARK: Actions
     
     @objc func onLocation() {
-        debugPrint("TMPLOG onLocation")
         let vc = LocationViewController()
         vc.lat = city?.latitude
         vc.lon = city?.longitude

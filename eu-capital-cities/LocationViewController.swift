@@ -71,7 +71,6 @@ class LocationViewController: UIViewController {
     // MARK: Actions
     
     @objc func onDissmiss() {
-        debugPrint("TMPLOG onDissmiss")
         dismiss(animated: true, completion: nil)
     }
 }
