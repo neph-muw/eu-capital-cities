@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7933EEC125334C6900B96334 /* CoreDataInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7933EEC025334C6900B96334 /* CoreDataInteractor.swift */; };
 		7978D7BE24EFF65F0097CC30 /* CityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978D7BD24EFF65F0097CC30 /* CityTableViewCell.swift */; };
 		7978D7C124EFF6C90097CC30 /* EuCity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978D7C024EFF6C90097CC30 /* EuCity.swift */; };
 		7978D7C424EFF91B0097CC30 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978D7C324EFF91B0097CC30 /* NetworkManager.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7933EEC025334C6900B96334 /* CoreDataInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataInteractor.swift; sourceTree = "<group>"; };
 		7978D7BD24EFF65F0097CC30 /* CityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityTableViewCell.swift; sourceTree = "<group>"; };
 		7978D7C024EFF6C90097CC30 /* EuCity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EuCity.swift; sourceTree = "<group>"; };
 		7978D7C324EFF91B0097CC30 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				7978D7C024EFF6C90097CC30 /* EuCity.swift */,
+				7933EEC025334C6900B96334 /* CoreDataInteractor.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				798DBD0424ECF38800661EFE /* ViewController.swift in Sources */,
+				7933EEC125334C6900B96334 /* CoreDataInteractor.swift in Sources */,
 				798DBD0A24ECF38800661EFE /* eu_capital_cities.xcdatamodeld in Sources */,
 				7978D7BE24EFF65F0097CC30 /* CityTableViewCell.swift in Sources */,
 				7978D7CC24F55B500097CC30 /* LoadingView.swift in Sources */,

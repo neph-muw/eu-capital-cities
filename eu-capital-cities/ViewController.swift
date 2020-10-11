@@ -23,7 +23,6 @@ class ViewController: UIViewController {
     let loadingView = LoadingView(frame: .zero)
     private(set) var cities: [EuCity] = []
     var isFilterEnabled: Bool = false
-    var coreDataCities: [NSManagedObject] = []
 
     // MARK: Life cycle
     
@@ -109,7 +108,16 @@ class ViewController: UIViewController {
         
         group.notify(queue: DispatchQueue.main) {
             
-            self.coreDataFetch()
+            do {
+                
+                try CoreDataInteractor.shared.coreDataFetch()
+                
+            } catch CoreDataInteractorError.coreDataFetchError(problem: let problemDescription) {
+                showError(from: self, with: problemDescription)
+            } catch let error as NSError {
+                showError(from: self, with: "CoreData: Could not fetch. \(error), \(error.userInfo)")
+            }
+            
             self.mapFavourites()
             
             self.loadingView.stopLoading()
@@ -136,68 +144,12 @@ class ViewController: UIViewController {
     
     func mapFavourites() {
          cities.forEach { city in
-            guard let cityId = city.id, let coreDataCity = coreDataCity(whereId: cityId) else { return }
+            guard let cityId = city.id, let coreDataCity = CoreDataInteractor.shared.coreDataCity(whereId: cityId) else { return }
             
             city.favourited = coreDataCity.value(forKeyPath: "favourited") as? Bool
         }
     }
     
-    func coreDataCity(whereId: String) -> NSManagedObject? {
-        coreDataCities.filter { city in
-            city.value(forKeyPath: "id") as? String == whereId
-        }.first
-    }
-    
-    func coreDataSave(city: EuCity) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return}
-        
-        let managedContext = appDelegate.persistentContainer.viewContext
-        guard let cityId = city.id else { return }
-        
-        guard city.favourited == true else {
-            // delete if unfauvorited and found in core data
-            guard let cityToBeDeleted: NSManagedObject = coreDataCity(whereId: cityId) else { return }
-            
-            managedContext.delete(cityToBeDeleted)
-            coreDataCities.removeAll { $0 == cityToBeDeleted }
-            
-            do {
-                try managedContext.save()
-            } catch let error as NSError {
-                showError(from: self, with: "CoreData: Could not delete. \(error), \(error.userInfo)")
-            }
-            return
-        }
-        
-        // do not add extra favourited values if exists
-        if coreDataCity(whereId: cityId) != nil { return }
-        
-        let entity = NSEntityDescription.entity(forEntityName: "CoreDataEuCity", in: managedContext)!
-        let coreDataCity = NSManagedObject(entity: entity, insertInto: managedContext)
-        
-        coreDataCity.setValue(city.id, forKeyPath: "id")
-        coreDataCity.setValue(city.favourited, forKeyPath: "favourited")
-        
-        
-        do {
-            try managedContext.save()
-            coreDataCities.append(coreDataCity)
-        } catch let error as NSError {
-            showError(from: self, with: "CoreData: Could not save. \(error), \(error.userInfo)")
-        }
-    }
-        
-    func coreDataFetch() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return}
-        
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "CoreDataEuCity")
-        do {
-            coreDataCities = try managedContext.fetch(fetchRequest)
-        } catch let error as NSError {
-            showError(from: self, with: "CoreData: Could not fetch. \(error), \(error.userInfo)")
-        }
-    }
 }
 
 extension ViewController: UITableViewDelegate {
@@ -256,7 +208,15 @@ extension ViewController: CityTableViewCellDelegate {
         }.first
         guard let city = changedCity else { return }
         city.favourited = favourited
-        coreDataSave(city: city)
+        
+        do {
+            try CoreDataInteractor.shared.coreDataSave(city: city)
+        } catch CoreDataInteractorError.coreDataSaveError(problem: let problemDescription) {
+            showError(from: self, with: problemDescription)
+        } catch let error as NSError {
+            showError(from: self, with: "CoreData: Could not save/delete. \(error), \(error.userInfo)")
+        }
+        
     }
 }
 
