@@ -23,6 +23,7 @@ class ViewController: UIViewController {
     let loadingView = LoadingView(frame: .zero)
     private(set) var cities: [EuCity] = []
     var isFilterEnabled: Bool = false
+    var shouldReloadFavourites: Bool = false
 
     // MARK: Life cycle
     
@@ -31,6 +32,15 @@ class ViewController: UIViewController {
         
         configureViews()
         loadCities()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if shouldReloadFavourites {
+            shouldReloadFavourites = false
+            self.tableView.reloadData()
+        }
     }
     
     private func configureViews() {

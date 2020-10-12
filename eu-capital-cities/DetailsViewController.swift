@@ -14,8 +14,9 @@ class DetailsViewController: UIViewController {
     private enum InternalConfiguration {
         static let imageSize = CGSize(width: 320, height: 320)
         static let titleHeight = CGFloat(40)
+        static let favouriteButtonSize = CGSize(width: 40, height: 40)
+        static let padding = CGFloat(10)
     }
-
 
     // MARK: Variables
     
@@ -25,6 +26,8 @@ class DetailsViewController: UIViewController {
     private let imageView = UIImageView()
     private let titleLabel = UILabel()
     private let descriptionLabel = UILabel()
+    private var favouriteButton: FavouriteButton!
+    private var favouritedStatusChanged: Bool = false
     
     // MARK: Life cycle
     
@@ -36,10 +39,12 @@ class DetailsViewController: UIViewController {
     }
     
     private func configureViews() {
+        navigationController?.delegate = self
+        
         let location = UIBarButtonItem(title: "Location", style: .plain, target: self, action: #selector(onLocation))
         navigationItem.rightBarButtonItems = [location]
         
-        backgroundView.backgroundColor = .white
+        backgroundView.backgroundColor = .systemBackground
         view.addSubview(backgroundView)
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -53,7 +58,6 @@ class DetailsViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.distribution = .fillProportionally
-//        stackView.alignment = .center
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
@@ -65,9 +69,23 @@ class DetailsViewController: UIViewController {
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(descriptionLabel)
         
+        favouritedStatusChanged = false
+        favouriteButton = FavouriteButton(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: InternalConfiguration.favouriteButtonSize))
+        favouriteButton.addTarget(self, action: #selector(onDetailFauvorite), for: .touchUpInside)
+        imageView.addSubview(favouriteButton)
+        imageView.isUserInteractionEnabled = true
+        favouriteButton.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
+            //imageView
             NSLayoutConstraint(item: imageView as Any, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: InternalConfiguration.imageSize.width),
             NSLayoutConstraint(item: imageView as Any, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: InternalConfiguration.imageSize.height),
+            //favouriteButton
+            imageView.trailingAnchor.constraint(equalTo: favouriteButton.trailingAnchor, constant: InternalConfiguration.padding),
+            imageView.bottomAnchor.constraint(equalTo: favouriteButton.bottomAnchor, constant: InternalConfiguration.padding),
+            NSLayoutConstraint(item: favouriteButton as Any, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: InternalConfiguration.favouriteButtonSize.width),
+            NSLayoutConstraint(item: favouriteButton as Any, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: InternalConfiguration.favouriteButtonSize.height),
+            //titleLabel
             NSLayoutConstraint(item: titleLabel as Any, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: InternalConfiguration.imageSize.width),
             NSLayoutConstraint(item: titleLabel as Any, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: InternalConfiguration.titleHeight)
         ])
@@ -76,6 +94,9 @@ class DetailsViewController: UIViewController {
         titleLabel.font = UIFont.boldSystemFont(ofSize: 23)
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
+        
+        guard let city = city else { return }
+        favouriteButton.isFavourited = city.favourited ?? false
     }
     
     private func fullfillViewsData() {
@@ -102,5 +123,37 @@ class DetailsViewController: UIViewController {
         vc.lon = city?.longitude
         let navigation = UINavigationController(rootViewController: vc)
         self.show(navigation, sender: self)
+    }
+    
+    @objc func onDetailFauvorite() {
+        favouriteButton.isFavourited = !favouriteButton.isFavourited
+        guard let city = city else { return }
+        city.favourited = favouriteButton.isFavourited
+        favouritedStatusChanged = true
+        
+        do {
+            try CoreDataInteractor.shared.coreDataSave(city: city)
+        } catch CoreDataInteractorError.coreDataSaveError(problem: let problemDescription) {
+            showError(from: self, with: problemDescription)
+        } catch let error as NSError {
+            showError(from: self, with: "CoreData: Details View - Could not save/delete. \(error), \(error.userInfo)")
+        }
+    }
+    
+    @objc private func onBack() {
+        
+        navigationController?.popViewController(animated: true)
+    }
+}
+
+
+extension DetailsViewController: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+        if let vc = viewController as? ViewController {
+            if favouritedStatusChanged {
+                vc.shouldReloadFavourites = true
+            }
+            navigationController.delegate = nil
+        }
     }
 }

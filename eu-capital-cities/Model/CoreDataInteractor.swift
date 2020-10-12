@@ -18,7 +18,7 @@ class CoreDataInteractor {
     
     // MARK: Variables
     
-    var coreDataCities: [NSManagedObject] = []
+    private(set) var coreDataCities: [NSManagedObject] = []
     
     // MARK: Singleton, Lifecycle
     static let shared = CoreDataInteractor()
