@@ -141,7 +141,7 @@ class ViewController: UIViewController {
     
     // MARK: Actions
     
-    @objc func onFilter() {
+    @objc private func onFilter() {
         isFilterEnabled = !isFilterEnabled
         tableView.reloadData()
     }

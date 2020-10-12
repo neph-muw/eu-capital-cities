@@ -30,7 +30,7 @@ class LocationViewController: UIViewController {
         let done = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(onDissmiss))
         navigationItem.rightBarButtonItems = [done]
         
-        backgroundView.backgroundColor = .white
+        backgroundView.backgroundColor = .systemBackground
         view.addSubview(backgroundView)
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

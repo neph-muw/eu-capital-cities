@@ -117,7 +117,7 @@ class DetailsViewController: UIViewController {
     
     // MARK: Actions
     
-    @objc func onLocation() {
+    @objc private func onLocation() {
         let vc = LocationViewController()
         vc.lat = city?.latitude
         vc.lon = city?.longitude
@@ -125,7 +125,7 @@ class DetailsViewController: UIViewController {
         self.show(navigation, sender: self)
     }
     
-    @objc func onDetailFauvorite() {
+    @objc private func onDetailFauvorite() {
         favouriteButton.isFavourited = !favouriteButton.isFavourited
         guard let city = city else { return }
         city.favourited = favouriteButton.isFavourited
@@ -138,11 +138,6 @@ class DetailsViewController: UIViewController {
         } catch let error as NSError {
             showError(from: self, with: "CoreData: Details View - Could not save/delete. \(error), \(error.userInfo)")
         }
-    }
-    
-    @objc private func onBack() {
-        
-        navigationController?.popViewController(animated: true)
     }
 }
 
